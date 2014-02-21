@@ -1,10 +1,11 @@
 # vim-one
 
-> Open file in specific instance of Vim, optionally in a split or tab
+> Open file in single server instance of Vim, optionally in a split or tab
 
-_NOTE: This script is in BETA at least until the end of March and will see
-substantial changes. Contributions are welcome to improve it, including
-support for invoking Vim on other platforms (Linux, Windows, etc.)_
+_NOTE: This script should be considered BETA quality at least until the
+end of March as it will see substantial changes. Contributions are welcome
+to improve it, including support for invoking Vim on other platforms
+(Linux, Windows, etc.)_
 
 # Features
 
@@ -14,7 +15,7 @@ support for invoking Vim on other platforms (Linux, Windows, etc.)_
 * Manages single remote session by default
 * Specify `--servername` option to target specific remote session
 
-Inspired by [Derek Wyatt’s video][dw] on coding Scala using Vim, this
+Inspired by [Derek Wyatt’s][dw] [One Vim ... just one][ov] video, this
 enhancement of the [mvim][mv] script will open your files in a single
 server instance (default `--servername` is _VIM_). This addresses
 a persistent problem faced by many MacVim users: inadvertently spawning
@@ -23,10 +24,10 @@ be located.
 
 Those users seeking to manage multiple instances, such as on the screens
 of multiple displays, can use an explicit `--servername` option to target 
-the desired instance. No `--remote` option is needed.
+the desired instance. No `--remote` option is needed, and you’re insulated
+from the idiosyncrasies of the remote options.
 
 [mv]: https://github.com/b4winckler/macvim/blob/master/src/MacVim/mvim
-[dw]: http://derekwyatt.org/2013/12/31/coding-scala-with-vim.html
 
 ## Requirements
 
@@ -84,6 +85,10 @@ set splitright
 
 ## See also
 
+* [One Vim ... just one][ov] video by [Derek Wyatt][dw] - along with
+  his recent video on Scala programming with Vim, an inspiration for this
+  script
+
 If you find _onevim_ useful, check out [@reedes][re]’s Vim plugins:
 
 * [vim-colors-pencil][cp] - color scheme for Vim inspired by IA Writer
@@ -96,6 +101,8 @@ If you find _onevim_ useful, check out [@reedes][re]’s Vim plugins:
 * [vim-wheel][wh] - screen-anchored cursor movement for Vim
 * [vim-wordy][wo] - uncovering usage problems in writing 
 
+[ov]: http://vimeo.com/4446112
+[dw]: https://github.com/derekwyatt
 [re]: http://github.com/reedes
 [cp]: http://github.com/reedes/vim-colors-pencil
 [pn]: http://github.com/reedes/vim-pencil
