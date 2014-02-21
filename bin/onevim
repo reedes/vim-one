@@ -224,7 +224,11 @@ if [ $? -eq 0 ]; then
       fi
     else
       # attempt to edit in a new server instance
-      last_opt="$remote_opt ${files[*]}"
+      if [ ${#files[@]} -gt 0 ] ; then
+        last_opt="$remote_opt ${files[*]}"
+      else
+        last_opt=" -- ${files[*]}"
+      fi
     fi  # is_server_active
   fi  # found_remote
 fi  # server_list
