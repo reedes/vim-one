@@ -1,8 +1,4 @@
 #!/bin/sh
-ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/vime
-ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/vims
-ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/vimv
-ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/vimt
 ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/mvime
 ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/mvims
 ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/mvimv
