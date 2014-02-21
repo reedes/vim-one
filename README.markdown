@@ -2,14 +2,14 @@
 
 > Open file in single server instance of Vim, optionally in a split or tab
 
-_NOTE: This script should be considered BETA quality at least until the
+_NOTE: _onevim_ should be considered BETA quality at least until the
 end of March as it will see substantial changes. Contributions are welcome
 to improve it, including support for invoking Vim on other platforms
 (Linux, Windows, etc.)_
 
 # Features
 
-* Script that builds on the [mvim][mv] script that ships with MacVim
+* Builds on the [mvim][mv] script that ships with MacVim
 * Symlink _prefix_ drives how Vim is invoked (as with _mvim_)
 * Symlink _suffix_ drives how file is opened (normal, tab, split, vsplit)
 * Manages single remote session by default
@@ -17,7 +17,7 @@ to improve it, including support for invoking Vim on other platforms
 
 Inspired by [Derek Wyatt’s][dw] “[One Vim ... just one][ov]” video, this
 enhancement of the [mvim][mv] script will open your files in a single
-server instance (default `--servername` is _VIM_). This addresses
+server instance (default `--servername` is `VIM`). This addresses
 a persistent problem faced by many MacVim users: inadvertently spawning
 multiple instances, when it’s not always clear where one’s buffer might be
 located.
