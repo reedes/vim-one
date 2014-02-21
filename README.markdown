@@ -8,7 +8,7 @@ support for invoking Vim on other platforms (Linux, Windows, etc.)_
 
 # Features
 
-* Bash script deriving from [mvim][mv] that ships with MacVim
+* Bash script derived from [mvim][mv] that ships with MacVim
 * Symlink _prefix_ drives how Vim is invoked (as with mvim)
 * Symlink _suffix_ drives how file is opened (normal, tab, split, vsplit)
 * Manages single remote session by default
