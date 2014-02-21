@@ -22,8 +22,8 @@ multiple instances, where it’s not always clear where one’s buffer might
 be located.
 
 Those users seeking to manage multiple instances, such as on the screens
-of multiple displays, can use an explicit `--servername` to target the
-desired instance. No `--remote` commands are needed.
+of multiple displays, can use an explicit `--servername` option to target 
+the desired instance. No `--remote` option is needed.
 
 [mv]: https://github.com/b4winckler/macvim/blob/master/src/MacVim/mvim
 [dw]: http://derekwyatt.org/2013/12/31/coding-scala-with-vim.html
