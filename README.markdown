@@ -28,6 +28,10 @@ desired instance. No `--remote` commands are needed.
 [mv]: https://github.com/b4winckler/macvim/blob/master/src/MacVim/mvim
 [dw]: http://derekwyatt.org/2013/12/31/coding-scala-with-vim.html
 
+## Requirements
+
+Currently requires a recent version of MacVim built with `+clientserver`
+
 ## Invoking _onevim_
 
 Those who have examined _mvim_ will have seen its versatility in invoking
