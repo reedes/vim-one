@@ -66,7 +66,7 @@ $ ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/mvimv   # gui open in vsplit
 $ ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/mvimt   # gui open in tab(s)
 ```
 
-These `s`, `v`, and `t` suffixes provide a hit to _onevim_ to open your
+These `s`, `v`, and `t` suffixes provide a hint to _onevim_ to open your
 file in `split`, `vsplit`, and in tabs, respectively. 
 
 You can choose names of your own, even replacing the MacVim defaults, so
