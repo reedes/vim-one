@@ -2,7 +2,7 @@
 
 > Open file in single server instance of Vim, optionally in a split or tab
 
-_NOTE: _onevim_ should be considered BETA quality at least until the
+_NOTE: onevim should be considered BETA quality at least until the
 end of March as it will see substantial changes. Contributions are welcome
 to improve it, including support for invoking Vim on other platforms
 (Linux, Windows, etc.)_
