@@ -9,7 +9,7 @@ support for invoking Vim on other platforms (Linux, Windows, etc.)_
 # Features
 
 * Bash script derived from [mvim][mv] that ships with MacVim
-* Symlink _prefix_ drives how Vim is invoked (as with mvim)
+* Symlink _prefix_ drives how Vim is invoked (as with _mvim_)
 * Symlink _suffix_ drives how file is opened (normal, tab, split, vsplit)
 * Manages single remote session by default
 * Specify `--servername` option to target specific remote session
@@ -34,10 +34,10 @@ Currently requires a recent version of MacVim built with `+clientserver`
 
 ## Invoking _onevim_
 
-Those who have examined _mvim_ will have seen its versatility in invoking
-the many different facets of Vim based on the naming convention of the
-symlink. For example, a homebrew installation of Vim on OS X will create
-the following symlinks:
+Those who have examined [mvim][mv] will have seen its versatility in
+invoking the many different facets of Vim based on the naming convention
+of the symlink. For example, a homebrew installation of Vim on OS X will
+create the following symlinks:
 
 ```
 gview    -> /usr/local/Cellar/macvim/7.4-72/bin/mvim
@@ -122,5 +122,5 @@ pull request for consideration.
 
 ## License
 
-Copyright 2014 by Reed Esau. Because `onevim` is derived from `mvim`, it
+Copyright 2014 by Reed Esau. Because _onevim_ is derived from _mvim_, it
 is distributed under the same license terms as Vim itself.
