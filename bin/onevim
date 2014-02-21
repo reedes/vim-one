@@ -200,15 +200,17 @@ if [ $? -eq 0 ]; then
       opts="$opts --servername $server_name"
     fi
 
+    remote_opt=
+    if [ "$open_with" = "tabedit" ] ; then
+      remote_opt="--remote-tab-silent "
+    else
+      remote_opt="--remote-silent "
+    fi
+
     if [ "$is_server_active" ] ; then
       if [ ${#files[@]} -gt 1 ] ; then
-        # more than one file specified, so load them all (ignoring open_with)
-        if [ "$open_with" = "tabedit" ] ; then
-          # TODO can we bring to foreground as well with --remote-send?
-          last_opt="--remote-tab-silent ${files[*]}"
-        else
-          last_opt="--remote-send \"<c-\><c-n>:call<space>foreground()<CR>\" -- ${files[*]}"
-        fi
+        # more than one file specified, so load them all
+        last_opt="--remote-send \"<c-\><c-n>:call<space>foreground()<CR>\" $remote_opt ${files[*]}"
       else
         keys=
         one_file=${files[0]}
@@ -222,11 +224,7 @@ if [ $? -eq 0 ]; then
       fi
     else
       # attempt to edit in a new server instance
-      if [ "$open_with" = "tabedit" ] ; then
-        last_opt="--remote-tab-silent ${files[*]}"
-      else
-        last_opt="--remote-silent ${files[*]}"
-      fi
+      last_opt="$remote_opt ${files[*]}"
     fi  # is_server_active
   fi  # found_remote
 fi  # server_list
