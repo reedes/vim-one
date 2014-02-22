@@ -1,78 +1,80 @@
 # vim-one
 
-> Open file in single server instance of Vim, optionally in a split or tab
+> Launcher targeting server instances of Vim, optionally in a split or tab
 
-_NOTE: onevim should be considered BETA quality at least until the
-end of March as it will see substantial changes. Contributions are welcome
-to improve it, including support for invoking Vim on other platforms
-(Linux, Windows, etc.)_
+_NOTE: this project is new and under active development. Features and
+configuration may changed abruptly and without announcement._
 
 # Features
 
-* Builds on the [mvim][mv] script that ships with MacVim
-* Symlink _prefix_ drives how Vim is invoked (as with _mvim_)
-* Symlink _suffix_ drives how file is opened (normal, tab, split, vsplit)
-* Manages single remote session by default
-* Specify `--servername` option to target specific remote session
-
 Inspired by [Derek Wyatt’s][dw] “[One Vim ... just one][ov]” video, this
-enhancement of the [mvim][mv] script will open your files in a single
-server instance (default `--servername` is `VIM`). This addresses
-a persistent problem faced by many MacVim users: inadvertently spawning
-multiple instances, when it’s not always clear where one’s buffer might be
-located.
+rewrite of the [mvim][mv] script enhances the use of Vim when invoked from
+the command line.
 
-Those users seeking to manage multiple server instances, such as on the
-screens of multiple displays, can use an explicit `--servername` option to
-target the desired instance. No `--remote` option is needed, and you’re
-insulated from the idiosyncrasies of the remote options.
+Use _onevim_ to conveniently launch Vim with the features you need:
+
+* Symlink _prefix_ drives how Vim is invoked (`g` or `m` prefix for gui mode, e.g.)
+* Symlink _suffix_ drives how file is opened (`s` for split, `v` for vsplit, `t` for tab)
+* Invoke against a gui or console mode
+* Target a specific build of Vim through the `VIM_APP_DIR` environment variable
+
+By design, invoking via _onevim_ will not typically create new instances,
+but will instead use the ‘remote’ capability of Vim built with `+clientserver`:
+
+* By default, all files open in a single default session (`--servername VIM`)
+* Specify `--servername {name}` option to target specific remote session
+
+Those users seeking to manage multiple server instances of Vim, such as on
+the screens of multiple displays, can use an explicit `--servername`
+option to target the desired instance. No `--remote` option is needed.
 
 ## Requirements
 
-Currently requires a recent version of MacVim built with `+clientserver`
+Currently requires a recent version of Vim built with `+clientserver`
 
-## Invoking _onevim_
+## Installation
 
-Those who have examined [mvim][mv] will have seen its versatility in
-invoking the many different facets of Vim based on the naming convention
-of a symlinked command. For example, a homebrew installation of Vim on 
-OS X will create the following symlinks:
+### Symlink creation
 
-```
-gview    -> /usr/local/Cellar/macvim/7.4-72/bin/mvim
-gvim     -> /usr/local/Cellar/macvim/7.4-72/bin/mvim
-gvimdiff -> /usr/local/Cellar/macvim/7.4-72/bin/mvim
-gvimex   -> /usr/local/Cellar/macvim/7.4-72/bin/mvim
-mview    -> /usr/local/Cellar/macvim/7.4-72/bin/mvim
-mvimdiff -> /usr/local/Cellar/macvim/7.4-72/bin/mvim
-mvimex   -> /usr/local/Cellar/macvim/7.4-72/bin/mvim
-```
+_onevim_ supports the same symlink naming convention as Vim itself, adding
+three special suffix characters to control how your file(s) are loaded
+into buffers.
 
-where `gview` will invoke Vim in read-only GUI mode, as if invoked with
-`vim -Rg`. For more details on this behavior, see
-
-```
-:help view
-```
-
-_onevim_ supports the same symlink naming convention as _mvim_. In
-addition it supports three special suffix characters to control how your
-file(s) are loaded:
+An example of creating symlinks for _onevim_:
 
 ```
 $ ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/mvime   # gui open with edit (default)
 $ ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/mvims   # gui open in split
 $ ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/mvimv   # gui open in vsplit
 $ ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/mvimt   # gui open in tab(s)
+$ ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/vime    # console open with edit (default)
+$ ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/vims    # console open in split
+$ ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/vimv    # console open in vsplit
+$ ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/vimt    # console open in tab(s)
 ```
 
 These `s`, `v`, and `t` suffixes provide a hint to _onevim_ to open your
-file in `split`, `vsplit`, and in tabs, respectively. 
+file in `split`, `vsplit`, and in tabs, respectively. The `e` suffix is
+a placeholder to avoid conflicting with existing names.
 
-You can choose names of your own, even replacing the MacVim defaults, so
-long as you conform to the prefix and suffix conventions.
+### Targeting a Vim instance
 
-## Configuration tips
+If you have more than one version of Vim installed, you can target the
+desired version through the `VIM_APP_DIR` environment variable.
+
+Example of an addition to `.bashrc` for MacVim users:
+
+```
+export VIM_APP_DIR=/usr/local/Cellar/macvim/7.4-72
+```
+
+Or for the X version of Vim:
+
+```
+export VIM_APP_DIR=/usr/local/Cellar/vim/7.4.161
+```
+
+### Window placement on splits
 
 To control the placement of windows on splits, add to your `.vimrc`:
 
@@ -82,10 +84,6 @@ set splitright
 ```
 
 ## See also
-
-* “[One Vim ... just one][ov]” video by [Derek Wyatt][dw] - along with his
-  recent video on Scala programming with Vim, an inspiration for this
-  script
 
 If you find _onevim_ useful, check out [@reedes][re]’s Vim plugins:
 
@@ -115,17 +113,9 @@ If you find _onevim_ useful, check out [@reedes][re]’s Vim plugins:
 
 ## Future development
 
-Supports Mac OS X in GUI mode now. Any help in porting to other platforms
-(Linux, Windows, etc.) will be welcomed. Please fork and offer pulls of
-tested modifications. 
-
-In addition, it’s not clear yet if non-GUI invocations of Vim can be
-supported in the same way. If you have any ideas on getting it working,
-please let me know.
-
 If you’ve spotted a problem or have an idea on improving this plugin,
-please post it to the github project issue page, or fork and offer a
-pull request for consideration.
+including porting to other platforms (Linux, Windows, etc.), please post
+it to the github project issue page, or fork and offer a pull request.
 
 ## License
 

@@ -42,7 +42,9 @@ quote() {
 if [ -z "$VIM_APP_DIR" ]; then
   myDir="`dirname "$0"`"
   myAppDir="$myDir/../Applications"
-  for i in /usr/local/Cellar/macvim/latest \
+  for i in \
+           /usr/local/Cellar/vim/latest \
+           /usr/local/Cellar/macvim/latest \
            ~/Applications ~/Applications/vim \
            $myDir $myDir/vim \
            $myAppDir $myAppDir/vim \
@@ -50,21 +52,25 @@ if [ -z "$VIM_APP_DIR" ]; then
            /Applications/Utilities /Applications/Utilities/vim ; do
     if [ -x "$i/MacVim.app" ]; then
       VIM_APP_DIR="$i"
+      binary="$VIM_APP_DIR/MacVim.app/Contents/MacOS/Vim"
+      break
+    elif [ -x "$i/bin/vim" ]; then
+      VIM_APP_DIR="$i"
+      binary="$VIM_APP_DIR/bin/vim"
       break
     fi
   done
 fi
 if [ -z "$VIM_APP_DIR" ]; then
-  echo "Sorry, cannot find MacVim.app. " \
+  echo "Sorry, cannot find Vim app directory. " \
        "Try setting the VIM_APP_DIR environment " \
-       "variable to the directory containing MacVim.app."
+       "variable to the directory containing MacVim.app or bin/vim."
   exit 1
 fi
-binary="$VIM_APP_DIR/MacVim.app/Contents/MacOS/Vim"
 if [ ! -x "$binary" ]; then
   echo "Sorry, but [$binary] is not executable. " \
        "Try setting the VIM_APP_DIR environment " \
-       "variable to the directory containing MacVim.app."
+       "variable to the directory containing MacVim.app or bin/vim."
   exit 1
 fi
 
@@ -148,11 +154,12 @@ if [ $? -eq 0 ]; then
             ;;
         -g | -f | --nofork | -v | -e | -E | -s | -d | -y | -R | -Z | -m | -M | -b | \
         -l | -C | -N | -D | -n | -L | -A | -H | -F | --noplugin | -p* | -o* | -O* | \
-        +* | -x | --serverlist | -h | --help | --version | --)
+        +* | -x | --serverlist | -h | --help | --version | -- | -reverse | --echo-wid)
             filtered_args="${filtered_args:+$filtered_args }'$(quote "$1")'"
             shift
             ;;
-        -V* | -r | -T | -u | -U | --cmd | -c | -S | -s | -W | -w | --startuptime | -i)
+        -V* | -r | -T | -u | -U | --cmd | -c | -S | -s | -W | -w | --startuptime | -i | \
+        -font | -geometry | -display | --role | --socketid)
             # an option with an argument
             for _ in 1 2; do
               filtered_args="${filtered_args:+$filtered_args }'$(quote "$1")'"
