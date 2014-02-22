@@ -3,7 +3,7 @@
 > Launcher targeting server instances of Vim, optionally in a split or tab
 
 _NOTE: this project is new and under active development. Features and
-configuration may changed abruptly and without announcement._
+configuration may change abruptly and without announcement._
 
 # Features
 
@@ -15,18 +15,16 @@ Use _onevim_ to conveniently launch Vim with the features you need:
 
 * Symlink _prefix_ drives how Vim is invoked (`g` or `m` prefix for gui mode, e.g.)
 * Symlink _suffix_ drives how file is opened (`s` for split, `v` for vsplit, `t` for tab)
-* Invoke against a gui or console mode
-* Target a specific build of Vim through the `VIM_APP_DIR` environment variable
 
-By design, invoking via _onevim_ will not typically create new instances,
-but will instead use the ‘remote’ capability of Vim built with `+clientserver`:
+By default, invoking via _onevim_ will not create new instances, but will
+instead use the ‘remote’ capability:
 
 * By default, all files open in a single default session (`--servername VIM`)
-* Specify `--servername {name}` option to target specific remote session
+* Specify an explicit name through `--servername {name}` option to target a remote session
 
-Those users seeking to manage multiple server instances of Vim, such as on
-the screens of multiple displays, can use an explicit `--servername`
-option to target the desired instance. No `--remote` option is needed.
+The latter feature is for users seeking to manage multiple server
+instances of Vim, such as on the screens of multiple displays. There’s no
+need to specify a `--remote` option.
 
 ## Requirements
 
@@ -55,7 +53,7 @@ $ ln -s ~/.vim/bundle/vim-one/bin/onevim ~/bin/vimt    # console open in tab(s)
 
 These `s`, `v`, and `t` suffixes provide a hint to _onevim_ to open your
 file in `split`, `vsplit`, and in tabs, respectively. The `e` suffix is
-a placeholder to avoid conflicting with existing names.
+merely a placeholder to avoid conflicting with existing commands.
 
 ### Targeting a Vim instance
 
@@ -114,8 +112,9 @@ If you find _onevim_ useful, check out [@reedes][re]’s Vim plugins:
 ## Future development
 
 If you’ve spotted a problem or have an idea on improving this plugin,
-including porting to other platforms (Linux, Windows, etc.), please post
-it to the github project issue page, or fork and offer a pull request.
+please post to the github project issue page. Or better yet, fork and
+offer a pull request. Ports to other platforms (Linux, Windows, etc.) are
+welcome.
 
 ## License
 
