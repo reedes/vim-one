@@ -127,22 +127,19 @@ if [ $? -eq 0 ]; then
 
   # analyze the arguments provided by the user, filtering out the filenames
   found_remote=
-  found_server_name=
+  server_name=
   files=()
   filtered_args=
   # destructively iterates across $@
   while test -n "$*"; do
     case "$1" in
         --servername=*)
-            found_server_name=${1:13}
-            filtered_args="${filtered_args:+$filtered_args }'$(quote "$1")'"
+            server_name=${1:13}
             shift
             ;;
         --servername)
-            filtered_args="${filtered_args:+$filtered_args }'$(quote "$1")'"
             shift
-            found_server_name=$1
-            filtered_args="${filtered_args:+$filtered_args }'$(quote "$1")'"
+            server_name=$1
             shift
             ;;
         --remote*)
@@ -150,14 +147,16 @@ if [ $? -eq 0 ]; then
             found_remote=true
             break
             ;;
-        -g | -f | --nofork | -v | -e | -E | -s | -d | -y | -R | -Z | -m | -M | -b | \
-        -l | -C | -N | -D | -n | -L | -A | -H | -F | --noplugin | -p* | -o* | -O* | \
-        +* | -x | --serverlist | -h | --help | --version | -- | -reverse | --echo-wid)
+        +* | -- | --echo-wid | --help | --nofork | --noplugin | --serverlist | --version | \
+        -A | -C | -D | -E | -F | -H | -L | -M | -N | -O* | -R | -Z | \
+        -b | -d | -e | -f | -g | -h | -l | -m | -n | -o* | -p* | -reverse | -s | \
+        -v | -x | -y)
             filtered_args="${filtered_args:+$filtered_args }'$(quote "$1")'"
             shift
             ;;
-        -V* | -r | -T | -u | -U | --cmd | -c | -S | -s | -W | -w | --startuptime | -i | \
-        -font | -geometry | -display | --role | --socketid)
+        --cmd | --role | --socketid | --startuptime | \
+        -S | -T | -U | -V* | -W | \
+        -c | -display | -font | -geometry | -i | -r | -s | -u | -w)
             # an option with an argument
             for _ in 1 2; do
               filtered_args="${filtered_args:+$filtered_args }'$(quote "$1")'"
@@ -183,27 +182,20 @@ if [ $? -eq 0 ]; then
     # using a filtered set of args, as this script is managing the remote session
     eval set -- "$filtered_args"
 
-    # If no explicit server, choose first from server list,
-    # but if no detected servers, choose VIM
-    server_name=
-    if [ -n "$found_server_name" ] ; then
-      # force UPPER
-      server_name=$(echo $found_server_name| tr '[:lower:]' '[:upper:]')
+    # If server_name was specified, force it to upper.
+    # If none specified, choose first from detected server
+    # list. If no detected servers, default to VIM.
+    if [ -n "$server_name" ] ; then
+      server_name=$(echo $server_name| tr '[:lower:]' '[:upper:]')
+    elif [ ${#available_servers[@]} -gt 0 ] ; then
+      server_name="${available_servers[0]}"
     else
-      if [ ${#available_servers[@]} -gt 0 ] ; then
-        server_name="${available_servers[0]}"
-      else
-        server_name="VIM"
-      fi
+      server_name="VIM"
     fi
+    opts="$opts --servername $server_name"
 
     is_server_active=
     case "${available_servers[@]}" in  *"$server_name"*) is_server_active=true ;; esac
-
-    if [ -z "$found_server_name" ] ; then
-      # populate an absent server name
-      opts="$opts --servername $server_name"
-    fi
 
     remote_opt=
     if [ "$open_with" = "tabedit" ] ; then
@@ -212,6 +204,7 @@ if [ $? -eq 0 ]; then
       remote_opt="--remote-silent "
     fi
 
+    # determine last_opt for arg list
     if [ "$is_server_active" ] ; then
       if [ ${#files[@]} -gt 1 ] ; then
         # more than one file specified, so load them all
