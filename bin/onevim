@@ -39,28 +39,26 @@ quote() {
 # or by un-commenting and editing the following line:
 #VIM_APP_DIR=/usr/local/Cellar/macvim/7.4-72
 
-if [ -z "$VIM_APP_DIR" ]; then
-  myDir="`dirname "$0"`"
-  myAppDir="$myDir/../Applications"
-  for i in \
-           /usr/local/Cellar/vim/latest \
-           /usr/local/Cellar/macvim/latest \
-           ~/Applications ~/Applications/vim \
-           $myDir $myDir/vim \
-           $myAppDir $myAppDir/vim \
-           /Applications /Applications/vim \
-           /Applications/Utilities /Applications/Utilities/vim ; do
-    if [ -x "$i/MacVim.app" ]; then
-      VIM_APP_DIR="$i"
-      binary="$VIM_APP_DIR/MacVim.app/Contents/MacOS/Vim"
-      break
-    elif [ -x "$i/bin/vim" ]; then
-      VIM_APP_DIR="$i"
-      binary="$VIM_APP_DIR/bin/vim"
-      break
-    fi
-  done
-fi
+myDir="`dirname "$0"`"
+myAppDir="$myDir/../Applications"
+for i in  $VIM_APP_DIR \
+          /usr/local/Cellar/vim/latest \
+          /usr/local/Cellar/macvim/latest \
+          ~/Applications ~/Applications/vim \
+          $myDir $myDir/vim \
+          $myAppDir $myAppDir/vim \
+          /Applications /Applications/vim \
+          /Applications/Utilities /Applications/Utilities/vim ; do
+  if [ -x "$i/MacVim.app" ]; then
+    VIM_APP_DIR="$i"
+    binary="$VIM_APP_DIR/MacVim.app/Contents/MacOS/Vim"
+    break
+  elif [ -x "$i/bin/vim" ]; then
+    VIM_APP_DIR="$i"
+    binary="$VIM_APP_DIR/bin/vim"
+    break
+  fi
+done
 if [ -z "$VIM_APP_DIR" ]; then
   echo "Sorry, cannot find Vim app directory. " \
        "Try setting the VIM_APP_DIR environment " \
