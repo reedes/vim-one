@@ -15,12 +15,12 @@ _onevim’s_ features:
 
 * Launcher to invoke Vim in any of its various startup modes (gui,
   console, etc.)
-* From the terminal, conveniently load a file into a split or tab
+* From the command line, load a file into a split or tab
 * Manages single server instance by default, avoiding the inadvertent
   creation of multiple forked gui instances
 * Supports multiple servers through the `--servername {name}` option
 * Attempting to load a file that is already present in another server
-  instance will conveniently bring the latter to the foreground
+  instance will bring the latter to the foreground
 
 ## Requirements
 
@@ -30,8 +30,8 @@ Currently requires a recent version of Vim built with `+clientserver`
 
 ### Symlink creation
 
-Create symlinks to the _onevim_ launcher script to conveniently invoke Vim
-with the capabilities you need. The prefix and suffix of the symlink are
+Create symlinks to the _onevim_ launcher script to invoke Vim with the
+capabilities you need. The prefix and suffix of the symlink are
 significant:
 
 * _prefix_ drives Vim’s startup mode (`g` or `m` prefix for gui mode, e.g.)
@@ -107,8 +107,8 @@ set splitright
 
 ## Usage
 
-Invoking via _onevim_ will conveniently manage server instance(s) using
-Vim’s _+clientserver_ ‘remote’ capability:
+Invoking via _onevim_ will manage server instance(s) using Vim’s
+_+clientserver_ ‘remote’ capability:
 
 * By default, all files open in a single default session (`--servername
   VIM`)
