@@ -2,8 +2,7 @@
 
 > Because Vim’s +clientserver is awesome
 
-_NOTE: this experimental project is new and under active development.
-Features and configuration may change abruptly and without announcement._
+![demo](screenshots/demo.gif)
 
 # Features
 
