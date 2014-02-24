@@ -2,7 +2,8 @@
 
 > Because Vim’s +clientserver is awesome
 
-![demo](screenshots/demo.gif)
+[ ![Image](screenshots/demo1.png "Demo Snapshot") ](screenshots/demo.gif "Demo Animated")
+_click image to see the animated demo_
 
 # Features
 
