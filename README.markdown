@@ -80,6 +80,12 @@ Or for the X version of Vim:
 export VIM_APP_DIR=/usr/local/Cellar/vim/7.4.161
 ```
 
+Note: as mentioned in [Issue #2][i2], `+clientserver` doesn’t appear to be
+working as expected in the console version of MacVim. Console users should use
+an X-based Vim built with `+clientserver` to make use of this plugin.
+
+[i2]:https://github.com/reedes/vim-one/issues/2
+
 ## Configuration
 
 ### Automatic focus switching on swapfile conflicts
