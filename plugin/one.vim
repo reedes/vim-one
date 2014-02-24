@@ -68,7 +68,7 @@ function! s:handleSwapConflictEvent (pathname)
         let l:e_pathname = substitute(a:pathname, ' ', '<space>', 'g')
         call remote_send( l:server_name,
           \ '<c-\><c-n>:cal<space>foreground()|b<space>' . l:e_pathname . '<CR>' )
-        call s:delayedMsg("Selected buffer found on server " . l:server_name)
+        "call s:delayedMsg("Selected buffer found on server " . l:server_name)
         let v:swapchoice = 'q'
         let l:found = 1
         break
