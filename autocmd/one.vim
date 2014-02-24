@@ -3,7 +3,7 @@
 " Description: autoload functions for vim-one plugin
 " Maintainer:  Reed Esau <github.com/reedes>
 " Created:     February 23, 2014
-" License:     The MIT License (MIT)
+" License:     Same as that under which Vim is distributed
 " ============================================================================
 
 " Hat tip to Damian Conway's automated response to swapfiles

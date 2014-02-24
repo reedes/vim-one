@@ -4,6 +4,7 @@
 #
 # Author     : github.com/reedes
 # Created    : February 18, 2014
+# License    : Same as that under which Vim is distributed
 #
 # This shell script passes all its arguments to the binary inside the
 # MacVim.app application bundle.  If you make links to this script as view,
