@@ -62,7 +62,7 @@ function! s:handleSwapConflictEvent (pathname)
   else
     let l:found = 0
     for l:server_name in split(serverlist(), '\n')
-      if l:server_name != v:servername &&
+      if l:server_name !=? v:servername &&
        \ remote_expr( l:server_name, "bufexists('" . a:pathname . "')" )
         " escape pathname
         let l:e_pathname = substitute(a:pathname, ' ', '<space>', 'g')
