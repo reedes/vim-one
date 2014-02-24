@@ -7,23 +7,26 @@
 # Features
 
 Inspired by [Derek Wyatt’s][dw] “[One Vim ... just one][ov]” video, this
-rewrite of the [mvim][mv] script enhances the use of Vim when invoked from
-the command line.
+rewrite of the [mvim][mv] script builds on Vim’s `+clientserver` capability to
+better manage remote server sessions.
 
 _onevim’s_ features:
 
-* Launcher to invoke Vim in any of its various startup modes (gui,
-  console, etc.)
+* Command line launch script to invoke Vim in any of its various startup modes
+  (gui, console, etc.)
 * From the command line, load a file into a split or tab
-* Manages single server instance by default, avoiding the inadvertent
-  creation of multiple forked gui instances
+* Manages single server instance by default, avoiding the inadvertent creation
+  of multiple forked gui instances
 * Supports multiple servers through the `--servername {name}` option
-* Attempting to load a file that is already present in another server
-  instance will bring the latter to the foreground
+* Attempting to load a file that is already present in another server instance
+  will bring the latter to the foreground
 
 ## Requirements
 
 Currently requires a recent version of Vim built with `+clientserver`
+
+Note that this plugin was developed and tested on Mac OS X. See the ‘future
+development’ section below for support under Linux and Windows.
 
 ## Installation
 
@@ -124,7 +127,7 @@ server(s).
 
 ## See also
 
-If you find _onevim_ useful, check out [@reedes][re]’s Vim plugins:
+If you find _onevim_ useful, check out [@reedes][re]’s other Vim plugins:
 
 * [vim-colors-pencil][cp] - color scheme for Vim inspired by IA Writer
 * [vim-lexical][lx] - building on Vim’s spell-check and thesaurus/dictionary completion
