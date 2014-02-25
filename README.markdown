@@ -2,6 +2,9 @@
 
 > Because Vim’s +clientserver is awesome
 
+__Note that this plugin remains under active testing and development, where
+features may temporarily go missing or change without announcement.__
+
 [ ![Image](screenshots/demo1.png "Demo Snapshot") ](screenshots/demo.gif "Demo Animated")
 _click image to see the animated demo_
 
