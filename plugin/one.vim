@@ -6,10 +6,11 @@
 " License:     Same as that under which Vim is distributed
 " ============================================================================
 
-" Hat tip to Damian Conway's automated response to swapfiles
-" which he placed in the public domain.
+" Hat tip to:
+" * Bram Moolenaar's EditExisting.vim
+" * Damian Conway's swapfile handler which he placed in the public domain.
 
-if exists('g:loaded_one') || &cp | finish | endif
+if exists('g:loaded_one') || &cp || v:version < 700 | finish | endif
 let g:loaded_one = 1
 
 " Save 'cpoptions' and set Vim default to enable line continuations.
@@ -26,7 +27,7 @@ if g:one#handleSwapfileConflicts
   if &swapfile
     augroup one_autoswap_detect
       autocmd!
-      autocmd SwapExists * call s:handleSwapConflictEvent(expand('<afile>:p'))
+      autocmd SwapExists * let v:swapchoice = s:handleSwapExistsEvent(expand('<afile>:p'))
     augroup END
   endif
 endif
@@ -50,53 +51,75 @@ function! s:delayedMsg (msg)
     augroup END
 endfunction
 
-function! s:delayedWipeout (filepath, servername)
-    " A sneaky way of deleting a buffer after the swapfile handler
-    " Make sure that v:swapchoice is 'o' (read-only) for best results
-    " v:swapchoice of 'q' for quit doesn't remove it from :ls, strangely
-    augroup one_autoswap_wipeout
-        autocmd!
-        " use bdelete or bwipeout? (unload doesn't remove it from :ls)
-  "exec 'autocmd BufWinEnter *  silent! bwipeout "' . a:filepath . '"'
-        " foreground doesn't appear to be working; leaving it in here for now
-  exec 'autocmd BufWinEnter *  silent! bwipeout "' . a:filepath . '"|call remote_foreground("' . a:servername . '")'
-
-        " And then remove these autocmds, so it's a "one-shot" deal...
-        autocmd BufWinEnter *  augroup one_autoswap_wipeout
-        autocmd BufWinEnter *  autocmd!
-        autocmd BufWinEnter *  augroup END
-    augroup END
-endfunction
-
-function! s:handleSwapConflictEvent (pathname)
+function! s:handleSwapExistsEvent (pathname)
   " if swapfile is older than file itself, just get rid of it...
   if getftime(v:swapname) < getftime(a:pathname)
       call s:delayedMsg("Old swapfile detected...and deleted")
       call delete(v:swapname)
-      let v:swapchoice = 'e'
+      return 'e'
 
   " Is file in buffer on another Vim server?
   " If so, switch to it
   else
-    let l:found = 0
+    let l:pathname_e = substitute(a:pathname, "'", "''", "g")
     for l:servername in split(serverlist(), '\n')
-      if l:servername !=? v:servername &&
-       \ remote_expr( l:servername, "bufexists('" . a:pathname . "')" )
-        " escape pathname
-        let l:e_pathname = substitute(a:pathname, ' ', '<space>', 'g')
-        call remote_send( l:servername, '<c-\><c-n>:b<space>' . l:e_pathname . '<CR>' )
+      if l:servername ==? v:servername | continue | endif       " skip myself
 
-        call s:delayedWipeout(a:pathname, l:servername)
-        let v:swapchoice = 'o'
-        let l:found = 1
+      if remote_expr( l:servername, "bufloaded('" . l:pathname_e . "')" )
+
+        if has('win32') | call remote_foreground(l:servername) | endif
+        call remote_expr(l:servername, "foreground()")
+
+        if remote_expr(l:servername, "exists('*one#EditExisting')")
+          " Make sure the file is visible in a window (not hidden).
+          " If v:swapcommand exists and is set, send it to the server.
+          call remote_expr(
+            \ l:servername,
+            \ "one#EditExisting('" .
+              \ l:pathname_e .
+              \ "', '" .
+              \ (exists("v:swapcommand") ? substitute(v:swapcommand, "'", "''", "g") : '') .
+              \ "')")
+        endif
+
+        return 'q'
+      endif
+    endfor
+  endif
+  return ''
+endfunction
+
+" Function used on the server to make the file visible and possibly execute a
+" command.
+function! one#EditExisting(fname, command)
+  " Get the window number of the file in the current tab page.
+  let l:winnr = bufwinnr(a:fname)
+  if l:winnr <= 0
+    " Not found, look in other tab pages.
+    let l:bufnr = bufnr(a:fname)
+    for l:i in range(tabpagenr('$'))
+      if index(tabpagebuflist(l:i + 1), l:bufnr) >= 0
+        " Make this tab page the current one and find the window number.
+        exe 'tabnext ' . (l:i + 1)
+        let l:winnr = bufwinnr(a:fname)
         break
       endif
     endfor
-    if !l:found
-      call s:delayedMsg("Sorry, buffer with swap file not found")
-      let v:swapchoice = 'o'
-    endif
   endif
+
+  if l:winnr > 0
+    exe l:winnr . "wincmd w"
+  elseif exists('*fnameescape')
+    exe "edit " . fnameescape(a:fname)
+  else
+    exe "edit " . escape(a:fname, " \t\n*?[{`$\\%#'\"|!<")
+  endif
+
+  if a:command != ''
+    exe "normal " . a:command
+  endif
+
+  redraw
 endfunction
 
 " Restore previous external compatibility options
