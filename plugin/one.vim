@@ -86,7 +86,9 @@ function! s:handleSwapExistsEvent (pathname)
       endif
     endfor
   endif
-  return ''
+
+  call s:delayedMsg("Sorry, buffer with swap file not found; opening read-only.")
+  return 'o'
 endfunction
 
 " Function used on the server to make the file visible and possibly execute a
