@@ -50,6 +50,24 @@ function! s:delayedMsg (msg)
     augroup END
 endfunction
 
+function! s:delayedWipeout (filepath, servername)
+    " A sneaky way of deleting a buffer after the swapfile handler
+    " Make sure that v:swapchoice is 'o' (read-only) for best results
+    " v:swapchoice of 'q' for quit doesn't remove it from :ls, strangely
+    augroup one_autoswap_wipeout
+        autocmd!
+        " use bdelete or bwipeout? (unload doesn't remove it from :ls)
+  "exec 'autocmd BufWinEnter *  silent! bwipeout "' . a:filepath . '"'
+        " foreground doesn't appear to be working; leaving it in here for now
+  exec 'autocmd BufWinEnter *  silent! bwipeout "' . a:filepath . '"|call remote_foreground("' . a:servername . '")'
+
+        " And then remove these autocmds, so it's a "one-shot" deal...
+        autocmd BufWinEnter *  augroup one_autoswap_wipeout
+        autocmd BufWinEnter *  autocmd!
+        autocmd BufWinEnter *  augroup END
+    augroup END
+endfunction
+
 function! s:handleSwapConflictEvent (pathname)
   " if swapfile is older than file itself, just get rid of it...
   if getftime(v:swapname) < getftime(a:pathname)
@@ -58,24 +76,24 @@ function! s:handleSwapConflictEvent (pathname)
       let v:swapchoice = 'e'
 
   " Is file in buffer on another Vim server?
-  " If so, switch to it, bringing to foreground (if OS allows)
+  " If so, switch to it
   else
     let l:found = 0
-    for l:server_name in split(serverlist(), '\n')
-      if l:server_name !=? v:servername &&
-       \ remote_expr( l:server_name, "bufexists('" . a:pathname . "')" )
+    for l:servername in split(serverlist(), '\n')
+      if l:servername !=? v:servername &&
+       \ remote_expr( l:servername, "bufexists('" . a:pathname . "')" )
         " escape pathname
         let l:e_pathname = substitute(a:pathname, ' ', '<space>', 'g')
-        call remote_send( l:server_name,
-          \ '<c-\><c-n>:cal<space>foreground()|b<space>' . l:e_pathname . '<CR>' )
-        "call s:delayedMsg("Selected buffer found on server " . l:server_name)
-        let v:swapchoice = 'q'
+        call remote_send( l:servername, '<c-\><c-n>:b<space>' . l:e_pathname . '<CR>' )
+
+        call s:delayedWipeout(a:pathname, l:servername)
+        let v:swapchoice = 'o'
         let l:found = 1
         break
       endif
     endfor
     if !l:found
-      call s:delayedMsg("Sorry, buffer with swap file not found; opening read-only as a precaution")
+      call s:delayedMsg("Sorry, buffer with swap file not found")
       let v:swapchoice = 'o'
     endif
   endif
