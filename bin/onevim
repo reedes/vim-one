@@ -101,16 +101,13 @@ case "$name" in
 esac
 
 # Does the user want to open as split or as a tab?
-open_keys=
 open_with=
 case "$name" in
   *s) open_with=split
-      #open_keys="<c-w>="     # make the window equal sizes
       ;;
   *t) open_with=tabedit
       ;;
   *v) open_with=vsplit
-      #open_keys="<c-w>l"     # assume splitright; move to right
       ;;
   *)  open_with=edit
       ;;
@@ -212,7 +209,6 @@ if [ $? -eq 0 ]; then
         # more than one file specified, so load them all (no splits yet)
         last_opt="$last_opt $remote_opt ${files[*]}"
       else
-        keys=
         one_file=${files[0]}
         if [ -n "$one_file" ] ; then
           # load single file (which may not yet exist) in split/tab/etc.
