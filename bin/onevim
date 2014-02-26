@@ -105,12 +105,12 @@ open_keys=
 open_with=
 case "$name" in
   *s) open_with=split
-      open_keys="<c-w>="     # make the window equal sizes
+      #open_keys="<c-w>="     # make the window equal sizes
       ;;
   *t) open_with=tabedit
       ;;
   *v) open_with=vsplit
-      open_keys="<c-w>l"     # move to right
+      #open_keys="<c-w>l"     # assume splitright; move to right
       ;;
   *)  open_with=edit
       ;;
@@ -207,19 +207,19 @@ if [ $? -eq 0 ]; then
 
     # determine last_opt for arg list
     if [ "$is_server_active" ] ; then
+      last_opt="--remote-send <C-\><C-N>:call<SPACE>foreground()<CR>"
       if [ ${#files[@]} -gt 1 ] ; then
-        # more than one file specified, so load them all
-        last_opt="--remote-send \"<c-\><c-n>:call<space>foreground()<CR>\" $remote_opt ${files[*]}"
+        # more than one file specified, so load them all (no splits yet)
+        last_opt="$last_opt $remote_opt ${files[*]}"
       else
         keys=
         one_file=${files[0]}
         if [ -n "$one_file" ] ; then
           # load single file (which may not yet exist) in split/tab/etc.
           full_path=$(realpath "$one_file")
-          full_path_escaped=${full_path/ /<space>}
-          keys="<c-\><c-n>:$open_with<space>$full_path_escaped<CR>"
+          full_path_escaped=${full_path/ /<SPACE>}
+          last_opt="$last_opt:$open_with<SPACE>$full_path_escaped<CR>"
         fi
-        last_opt="--remote-send \"<c-\><c-n>:call<space>foreground()<CR>$keys$open_keys\""
       fi
     else
       # attempt to edit in a new server instance
