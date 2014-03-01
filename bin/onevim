@@ -124,7 +124,7 @@ if [ $? -eq 0 ]; then
   done
 
   # analyze the arguments provided by the user, filtering out the filenames
-  found_remote=
+  user_managed=
   server_name=
   files=()
   filtered_args=
@@ -140,14 +140,14 @@ if [ $? -eq 0 ]; then
             server_name=$1
             shift
             ;;
-        --remote*)
-            # detected user-managed remote session, so bail early
-            found_remote=true
+        --remote* | -p* | -o* | -O*)
+            # detected user-managed remote/split/tab session, so bail early
+            user_managed=true
             break
             ;;
         +* | -- | --echo-wid | --help | --nofork | --noplugin | --serverlist | --version | \
-        -A | -C | -D | -E | -F | -H | -L | -M | -N | -O* | -R | -Z | \
-        -b | -d | -e | -f | -g | -h | -l | -m | -n | -o* | -p* | -reverse | -s | \
+        -A | -C | -D | -E | -F | -H | -L | -M | -N | -R | -Z | \
+        -b | -d | -e | -f | -g | -h | -l | -m | -n | -reverse | -s | \
         -v | -x | -y)
             filtered_args="${filtered_args:+$filtered_args }'$(quote "$1")'"
             shift
@@ -173,8 +173,8 @@ if [ $? -eq 0 ]; then
     esac
   done
 
-  if [ "$found_remote" ] ; then
-    # the user is managing the remote session, so bail
+  if [ "$user_managed" ] ; then
+    # the user is managing the session, so bail
     eval set -- "$original_args"
   else
     # using a filtered set of args, as this script is managing the remote session
@@ -225,7 +225,7 @@ if [ $? -eq 0 ]; then
         last_opt=" -- ${files[*]}"
       fi
     fi  # is_server_active
-  fi  # found_remote
+  fi  # user_managed
 fi  # server_list
 
 # Last step:  fire up vim.
