@@ -36,6 +36,40 @@ function! s:delayedMsg (msg)
     endif
 endfunction
 
+function! s:closeLocalBuffer (bnum)
+    " Close local buffer when remote buffer is already open
+    if g:one#autocloseOpenedBuffers && has('autocmd')
+      augroup kill_invalid_buffer
+          autocmd!
+          autocmd BufWinEnter *  echohl WarningMsg
+    exec 'autocmd BufWinEnter *  echon "\r'.printf("File already opened in remote server.").'"'
+          autocmd BufWinEnter *  echohl NONE
+
+          " Close the buffer we attempted to open
+    exec 'autocmd BufWinEnter *  call s:closeBuffer('.a:bnum.')'
+
+          " And then remove these autocmds, so it's a "one-shot" deal...
+          autocmd BufWinEnter *  augroup kill_invalid_buffer
+          autocmd BufWinEnter *  autocmd!
+          autocmd BufWinEnter *  augroup END
+      augroup END
+    endif
+endfunction
+
+function! s:closeBuffer(bufnum)
+  " Shamelessly ripped from NERDTree
+  " 1. ensure that all windows which display the just deleted filename
+  " now display an empty buffer (so a layout is preserved).
+  " Is not it better to close single tabs with this file only ?
+  let s:originalTabNumber = tabpagenr()
+  let s:originalWindowNumber = winnr()
+  exec "tabdo windo if winbufnr(0) == " . a:bufnum . " | exec ':enew! ' | endif"
+  exec "tabnext " . s:originalTabNumber
+  exec s:originalWindowNumber . "wincmd w"
+  " 3. We don't need a previous buffer anymore
+  exec "bwipeout! " . a:bufnum
+endfunction
+
 function! one#handleSwapExistsEvent (pathname)
   " if swapfile is older than file itself, just get rid of it...
   if getftime(v:swapname) < getftime(a:pathname)
@@ -67,6 +101,7 @@ function! one#handleSwapExistsEvent (pathname)
               \ "')")
         endif
 
+        call s:closeLocalBuffer(bufnr('%'))
         return 'q'
       endif
     endfor

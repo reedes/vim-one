@@ -106,6 +106,17 @@ following value to `0` in your `.vimrc`:
 let g:one#handleSwapfileConflicts = 1     " 0=disable, 1=enable (def)
 ```
 
+### Buffer auto-close on swapfile conflicts
+
+If swapfile is enabled and you request that a file be loaded that is
+already loaded on another server instance, _onevim_ will automatically
+close the local buffer opened by `:edit`. Requires
+`g:one#handleSwapfileConflicts` to be set.
+
+```
+let g:one#autocloseOpenedBuffers = 1      " 0=disable (def), 1=enable
+```
+
 ### Window placement on splits
 
 To control the placement of windows on splits, add to your `.vimrc`:
