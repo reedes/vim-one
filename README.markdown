@@ -1,3 +1,13 @@
+- - -
+- - -
+- - -
+- - - 
+**IMPORTANT NOTE: THIS PROJECT HAS BEEN DISCONTINUED (and archived)**
+- - -
+- - -
+- - -
+- - -
+
 # vim-one
 
 > Because Vim’s +clientserver is awesome
