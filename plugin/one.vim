@@ -18,9 +18,14 @@ if !exists('g:one#handleSwapfileConflicts')
   let g:one#handleSwapfileConflicts = 1     " 0=disable, 1=enable (def)
 endif
 
+if !exists('g:autocloseOpenedBuffers')
+  " by default, do not autoclose buffers
+  let g:one#autocloseOpenedBuffers = 0      " 0=disable (def), 1=enable
+endif
+
 " Execute handler whenever swapfile is detected
 if g:one#handleSwapfileConflicts &&
- \ has('autocmd') && 
+ \ has('autocmd') &&
  \ &swapfile
   augroup one_autoswap_detect
     autocmd!
